@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Day Photo</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
+    <string name="transition_full_picture">transition_full_picture</string>
+    <string name="set_as_wallpaper">Установить обои</string>
+    <string name="button_start_change">Start</string>
+    <string name="button_stop_change">Stop</string>
+    <string name="button_album_create">Create</string>
+</resources>
