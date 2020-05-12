@@ -10,15 +10,15 @@ import com.sashamprog.wallpapers.R
 import kotlinx.android.synthetic.main.list_item_picture.view.*
 
 class PictureAdapter(
-    internal var items: List<Picture> = listOf(),
-    internal var onClickItemListener: ((View, Picture) -> Unit)? = null,
-    internal var onClickFavoriteListener: ((View, Picture) -> Unit)? = null
+        internal var items: List<Picture> = listOf(),
+        internal var onClickItemListener: ((View, Picture) -> Unit)? = null,
+        internal var onClickFavoriteListener: ((View, Picture) -> Unit)? = null
 ) : RecyclerView.Adapter<PictureAdapter.PictureViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder {
         return PictureViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item_picture, parent, false)
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.list_item_picture, parent, false)
         )
     }
 
@@ -35,12 +35,12 @@ class PictureAdapter(
             val picture = items[position]
             view.apply {
                 Glide.with(context)
-                    .load(picture.preview)
-                    .into(image_view_preview)
+                        .load(picture.preview)
+                        .into(image_view_preview)
 
                 image_view_favorite.setImageResource(
-                    if (picture.isFavorite)
-                        android.R.drawable.btn_star_big_on else android.R.drawable.btn_star_big_off
+                        if (picture.isFavorite)
+                            android.R.drawable.btn_star_big_on else android.R.drawable.btn_star_big_off
                 )
 
                 image_view_favorite.setOnClickListener {

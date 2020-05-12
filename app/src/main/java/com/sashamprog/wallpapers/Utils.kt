@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
+import androidx.core.util.Consumer
 import com.bumptech.glide.Glide
+import com.sashamprog.wallpapers.base.MvpPresenter
+import com.sashamprog.wallpapers.base.MvpView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single

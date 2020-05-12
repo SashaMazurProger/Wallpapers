@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.sashamprog.wallpapers.Picture
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
 interface DbHelper {
     fun favorites(): Observable<List<FavoriteDb>>
@@ -23,7 +24,9 @@ interface DbHelper {
     fun close()
 }
 
-class DbHelperImp(context: Context) : DbHelper, SQLiteOpenHelper(context, "app.db", null, 2) {
+class DbHelperImp @Inject constructor(
+    context: Context
+) : DbHelper, SQLiteOpenHelper(context, "app.db", null, 1) {
 
     private var db: SQLiteDatabase = writableDatabase
 
@@ -144,14 +147,12 @@ class DbHelperImp(context: Context) : DbHelper, SQLiteOpenHelper(context, "app.d
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        if (oldVersion == 1 && newVersion == 2) {
-            db?.execSQL("CREATE TABLE ${AlbumDb.TABLE}(${AlbumDb.COLUMN_ID} INTEGER PRIMARY KEY, ${AlbumDb.COLUMN_NAME} TEXT NOT NULL);")
-            db?.execSQL("CREATE TABLE ${AlbumPictureDb.TABLE}(${AlbumPictureDb.COLUMN_PICTURE_ID} INTEGER, ${AlbumPictureDb.COLUMN_ALBUM_ID} INTEGER);")
-        }
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL("CREATE TABLE ${FavoriteDb.TABLE}(${FavoriteDb.COLUMN_ID} INTEGER PRIMARY KEY, ${FavoriteDb.COLUMN_URL} TEXT NOT NULL);")
+        db?.execSQL("CREATE TABLE ${AlbumDb.TABLE}(${AlbumDb.COLUMN_ID} INTEGER PRIMARY KEY, ${AlbumDb.COLUMN_NAME} TEXT NOT NULL);")
+        db?.execSQL("CREATE TABLE ${AlbumPictureDb.TABLE}(${AlbumPictureDb.COLUMN_PICTURE_ID} INTEGER, ${AlbumPictureDb.COLUMN_ALBUM_ID} INTEGER);")
     }
 }
 

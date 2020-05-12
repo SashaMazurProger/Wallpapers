@@ -1,8 +1,6 @@
 package com.sashamprog.wallpapers.presenter.implement
 
-import android.content.Context
 import com.sashamprog.wallpapers.FavoriteManager
-import com.sashamprog.wallpapers.FavoriteManagerImp
 import com.sashamprog.wallpapers.Interactor
 import com.sashamprog.wallpapers.Picture
 import com.sashamprog.wallpapers.base.BasePresenter
@@ -10,19 +8,13 @@ import com.sashamprog.wallpapers.presenter.MainPresenter
 import com.sashamprog.wallpapers.view.MainView
 import javax.inject.Inject
 
-class MainPresenterImp @Inject constructor() : BasePresenter<MainView>(), MainPresenter {
-
-    private lateinit var interactor: Interactor
-    lateinit var favoriteManager: FavoriteManager
-
-    override fun onAttach(mvpView: MainView, context: Context) {
-        super.onAttach(mvpView)
-        interactor = Interactor(context)
-        favoriteManager = FavoriteManagerImp(context)
-    }
+class MainPresenterImp @Inject constructor(
+    private val favoriteManager: FavoriteManager,
+    private val interactor: Interactor
+) : BasePresenter<MainView>(), MainPresenter {
 
     override fun setUp() {
-        mvpView?.setAutoChangeSwitch(interactor.changeWallpaper)
+        mvpView?.setAutoChangeSwitch(interactor.isAutoChangeRunning())
         interactor.pictures()
             .lifecycle()
             .subscribe(
@@ -33,9 +25,11 @@ class MainPresenterImp @Inject constructor() : BasePresenter<MainView>(), MainPr
             )
     }
 
-    override fun onSwitchAutoChange() {
-        val newValue = !interactor.changeWallpaper
-        interactor.changeWallpaper = newValue
+    override fun onSwitchAutoChange(millisPeriod: Long) {
+        val newValue = !interactor.isAutoChangeRunning()
+        if (newValue) interactor.startAutoChange(millisPeriod)
+        else interactor.stopAutoChange()
+
         mvpView?.setAutoChangeSwitch(newValue)
     }
 
@@ -56,4 +50,10 @@ class MainPresenterImp @Inject constructor() : BasePresenter<MainView>(), MainPr
                 { error -> mvpView?.showMessage(error.message) }
             )
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        interactor.clear()
+    }
 }
+

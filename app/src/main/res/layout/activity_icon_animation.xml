@@ -7,7 +7,7 @@
     tools:context=".view.implement.IconAnimationActivity">
 
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_view_bar_icon"
         android:layout_width="150dp"
         android:layout_height="150dp"

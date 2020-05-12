@@ -15,4 +15,5 @@ interface FavoriteManager {
     fun albums(): Observable<List<FavAlbum>>
     fun albumPictures(): Observable<List<AlbumPicture>>
     fun addAlbumPicture(pictureId: Int, albumId: Int): Single<Boolean>
+    fun clear()
 }

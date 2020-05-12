@@ -1,10 +1,10 @@
 package com.sashamprog.wallpapers.mapper
 
 import com.sashamprog.wallpapers.Picture
-import com.sashamprog.wallpapers.PixabayResponse
 import com.sashamprog.wallpapers.db.AlbumDb
 import com.sashamprog.wallpapers.db.AlbumPictureDb
 import com.sashamprog.wallpapers.db.FavoriteDb
+import com.sashamprog.wallpapers.network.PixabayResponse
 import com.sashamprog.wallpapers.ui_model.AlbumPicture
 import com.sashamprog.wallpapers.ui_model.FavAlbum
 import com.sashamprog.wallpapers.ui_model.FavPicture

@@ -12,9 +12,11 @@ import com.sashamprog.wallpapers.ui_model.FavAlbum
 import com.sashamprog.wallpapers.ui_model.FavPicture
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class FavoriteManagerImp(context: Context) : FavoriteManager {
-    private val dbHelper: DbHelper = DbHelperImp(context)
+class FavoriteManagerImp @Inject constructor(
+  private val dbHelper: DbHelper
+) : FavoriteManager {
 
     override fun addFavorite(picture: Picture): Single<Boolean> {
         return dbHelper.addFavorite(picture)
@@ -53,5 +55,9 @@ class FavoriteManagerImp(context: Context) : FavoriteManager {
             dbHelper.albumPictures(),
             AlbumPictureDbZipper()
         )
+    }
+
+    override fun clear() {
+        dbHelper.close()
     }
 }

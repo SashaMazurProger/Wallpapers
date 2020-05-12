@@ -16,17 +16,13 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.sashamprog.wallpapers.Picture
 import com.sashamprog.wallpapers.R
 import com.sashamprog.wallpapers.base.BaseActivity
 import com.sashamprog.wallpapers.presenter.MainPresenter
 import com.sashamprog.wallpapers.view.MainView
 import com.sashamprog.wallpapers.view.adapter.PictureAdapter
-import com.sashamprog.wallpapers.worker.ChangeWorker
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -39,8 +35,7 @@ class MainActivity : BaseActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        presenter.onAttach(this, this)
-        presenter.setUp()
+        presenter.onAttach(this)
 
         bar_container.post {
             val alpha = ObjectAnimator.ofFloat(bar_container, "alpha", 0f, 1f)
@@ -62,17 +57,17 @@ class MainActivity : BaseActivity(), MainView {
             set.start()
         }
 
-        switch_hide_favorite.post {
-            val translateAnimation = TranslateAnimation(
-                (switch_hide_favorite.width * -1).toFloat(),
-                0f,
-                0f,
-                0f
-            )
-            translateAnimation.duration = 3000
-            translateAnimation.interpolator = DecelerateInterpolator()
-            switch_hide_favorite.startAnimation(translateAnimation)
-        }
+//        switch_hide_favorite.post {
+//            val translateAnimation = TranslateAnimation(
+//                (switch_hide_favorite.width * -1).toFloat(),
+//                0f,
+//                0f,
+//                0f
+//            )
+//            translateAnimation.duration = 3000
+//            translateAnimation.interpolator = DecelerateInterpolator()
+//            switch_hide_favorite.startAnimation(translateAnimation)
+//        }
 
         ObjectAnimator.ofFloat(image_view_bar_icon, "alpha", 0f, 1f).apply {
             duration = 3000
@@ -97,17 +92,17 @@ class MainActivity : BaseActivity(), MainView {
 //            linear_layout2.removeViewAt(3)
 //        }, 3000)
 
-        val scene1 = Scene.getSceneForLayout(scene_root, R.layout.scene1, this)
-        val scene2 = Scene.getSceneForLayout(scene_root, R.layout.scene2, this)
-        switch_hide_favorite.setOnCheckedChangeListener { _, isChecked ->
-            //            val set = TransitionSet()
-//            set.addTransition(Fade())
-//            set.addTransition(ChangeBounds())
-//            set.ordering = TransitionSet.ORDERING_TOGETHER
-//            set.duration = 1000
-//            set.interpolator = AccelerateInterpolator()
-            TransitionManager.go(if (isChecked) scene2 else scene1)
-        }
+//        val scene1 = Scene.getSceneForLayout(scene_root, R.layout.scene1, this)
+//        val scene2 = Scene.getSceneForLayout(scene_root, R.layout.scene2, this)
+//        switch_hide_favorite.setOnCheckedChangeListener { _, isChecked ->
+//            //            val set = TransitionSet()
+////            set.addTransition(Fade())
+////            set.addTransition(ChangeBounds())
+////            set.ordering = TransitionSet.ORDERING_TOGETHER
+////            set.duration = 1000
+////            set.interpolator = AccelerateInterpolator()
+//            TransitionManager.go(if (isChecked) scene2 else scene1)
+//        }
 
 
         bar_container.setOnClickListener {
@@ -131,30 +126,20 @@ class MainActivity : BaseActivity(), MainView {
         }
 
         button_start_change.setOnClickListener {
-            presenter.onSwitchAutoChange()
+            val minutesArray = resources.getStringArray(R.array.change_wallpaper_period_minutes)
+            val minutes = minutesArray[spinner_period.selectedItemPosition].toLong()
+            presenter.onSwitchAutoChange(minutes * 60 * 1000)
         }
 
+        presenter.setUp()
     }
 
     override fun setAutoChangeSwitch(checked: Boolean) {
-        if (checked) {
-            val minutesArray = resources.getStringArray(R.array.change_wallpaper_period_minutes)
-            val minutes = minutesArray[spinner_period.selectedItemPosition].toLong()
-
-            val request = PeriodicWorkRequestBuilder<ChangeWorker>(minutes, TimeUnit.MINUTES)
-                .addTag("change_work")
-                .build()
-
-            WorkManager.getInstance(this)
-                .enqueue(request)
-
+        if (checked)
             button_start_change.setText(R.string.button_stop_change)
-        } else {
-            WorkManager.getInstance(this)
-                .cancelAllWorkByTag("change_work")
-
+        else
             button_start_change.setText(R.string.button_start_change)
-        }
+
     }
 
     override fun showPictures(pictures: List<Picture>?) {

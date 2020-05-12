@@ -1,5 +1,6 @@
 package com.sashamprog.wallpapers.base
 
+import androidx.core.util.Consumer
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single

@@ -8,3 +8,5 @@ interface MainView : MvpView<MainPresenter> {
     fun showPictures(pictures: List<Picture>?)
     fun setAutoChangeSwitch(checked: Boolean)
 }
+
+

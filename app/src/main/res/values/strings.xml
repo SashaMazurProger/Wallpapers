@@ -6,4 +6,5 @@
     <string name="button_start_change">Start</string>
     <string name="button_stop_change">Stop</string>
     <string name="button_album_create">Create</string>
+    <string name="album_edit_name_title">Name</string>
 </resources>

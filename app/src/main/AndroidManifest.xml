@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="com.sashamprog.wallpapers">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -14,7 +14,7 @@
             android:networkSecurityConfig="@xml/network_security_config"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/MyTheme.DayNight">
         <activity android:name=".view.implement.FavoriteActivity">
         </activity>
         <activity android:name=".view.implement.FullPictureActivity"/>
@@ -27,6 +27,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.implement.AlbumActivity"/>
+
+        <provider
+                android:name="androidx.work.impl.WorkManagerInitializer"
+                android:authorities="${applicationId}.workmanager-init"
+                android:exported="false"
+                tools:node="remove"/>
     </application>
 
 </manifest>
