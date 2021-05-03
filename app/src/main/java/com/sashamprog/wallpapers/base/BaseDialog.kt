@@ -62,10 +62,11 @@ abstract class BaseDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // the stringToSend
-        val root = ConstraintLayout(activity)
+        val root = ConstraintLayout(requireContext())
         root.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT)
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
         // creating the fullscreen dialog
         val dialog = Dialog(activity!!)
@@ -75,8 +76,8 @@ abstract class BaseDialog : DialogFragment() {
         if (dialog.window != null) {
 //            dialog.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             dialog.window?.setLayout(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             )
         } else {
             dismiss()
