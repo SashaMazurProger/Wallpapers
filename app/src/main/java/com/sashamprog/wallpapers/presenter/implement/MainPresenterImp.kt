@@ -6,6 +6,11 @@ import com.sashamprog.wallpapers.Picture
 import com.sashamprog.wallpapers.base.BasePresenter
 import com.sashamprog.wallpapers.presenter.MainPresenter
 import com.sashamprog.wallpapers.view.MainView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainPresenterImp @Inject constructor(
@@ -15,14 +20,11 @@ class MainPresenterImp @Inject constructor(
 
     override fun setUp() {
         mvpView?.setAutoChangeSwitch(interactor.isAutoChangeRunning())
-        interactor.pictures()
-            .lifecycle()
-            .subscribe(
-                { pictures ->
-                    mvpView?.showPictures(pictures)
-                },
-                { error -> mvpView?.showMessage(error.message) }
-            )
+        GlobalScope.launch(Dispatchers.Main) {
+            interactor.pictures()
+                .catch { mvpView?.showMessage(it.message) }
+                .collect { mvpView?.showPictures(it) }
+        }
     }
 
     override fun onSwitchAutoChange(millisPeriod: Long) {

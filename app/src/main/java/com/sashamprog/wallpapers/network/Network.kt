@@ -1,6 +1,7 @@
 package com.sashamprog.wallpapers.network
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.http.GET
 
@@ -8,7 +9,7 @@ import retrofit2.http.GET
 interface PixabayApi {
 
     @GET("?key=$KEY&per_page=200&orientation=vertical&q=wallpaper")
-    fun pictures(): Call<PixabayResponse>
+    suspend fun pictures(): PixabayResponse
 
     companion object {
         const val BASE_URL = "https://pixabay.com/api/"
